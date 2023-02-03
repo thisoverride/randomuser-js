@@ -1,8 +1,8 @@
 import { instance } from "../config/axios.conf";
-import { ApiProviderAbstract } from "./ApiProviderAbstract";
+import { RandomUserMeAbstract } from "./RandomUserMeAbstract";
 import { RandomUser } from "../types/types";
 
-export class ApiProvider extends ApiProviderAbstract {
+export class RandomUserMe extends RandomUserMeAbstract {
   constructor() {
     super();
   }
@@ -13,7 +13,7 @@ export class ApiProvider extends ApiProviderAbstract {
    * @return {*}  {Promise<RandomUser>}
    * @memberof ApiProvider
    */
-  public async randomPeople(): Promise<RandomUser> {
+  public async randomUser(): Promise<RandomUser> {
     try {
       let { data } = await instance.get("/api");
 

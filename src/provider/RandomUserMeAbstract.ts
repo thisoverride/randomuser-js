@@ -1,6 +1,6 @@
 import { RandomUser } from "../types/types";
 
-export abstract class ApiProviderAbstract {
+export abstract class RandomUserMeAbstract {
   constructor() {}
 
   /**
@@ -9,7 +9,7 @@ export abstract class ApiProviderAbstract {
    * @abstract
    * @memberof ApiProviderAbstract
    */
-  abstract randomPeople(): Promise<RandomUser>;
+  abstract randomUser(): Promise<RandomUser>;
 
   /**
    * Return one random person identity by country nationality

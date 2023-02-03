@@ -1,6 +1,6 @@
 {
-  "name": "randomuserjss",
-  "version": "0.1.4",
+  "name": "randomuserjssx",
+  "version": "0.1.5",
   "main": "./lib/main.js",
   "types": "./lib/main.d.ts",
   "files": ["lib/**/*"],

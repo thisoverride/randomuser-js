@@ -1,2 +1,3 @@
-import { ApiProvider } from "./provider/ApiProvider";
-export default new ApiProvider();
+import { RandomUserMe } from "./provider/RandomUserMe";
+const randomuserme = new RandomUserMe();
+export default randomuserme;

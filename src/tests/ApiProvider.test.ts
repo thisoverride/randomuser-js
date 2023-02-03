@@ -1,13 +1,13 @@
 import { ApiProvider } from "../provider/ApiProvider"
 import {RandomUser} from '../types/types'
 
-let redomeUsme = new ApiProvider();
+let randomUser = new ApiProvider();
 
 
 describe('',()=>{
-    it('should be a object', async ()=>{
-        let data:RandomUser = await redomeUsme.randomPeople()
-
-        expect(data).toBe(RandomUser)
-    })
+    test("test randomPeople method", () => {
+        const expectedResult = {} as RandomUser;
+        return expect(randomUser.randomPeople()).resolves.toEqual(expectedResult);
+      });
+      
 })

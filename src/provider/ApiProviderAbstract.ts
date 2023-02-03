@@ -1,13 +1,15 @@
+import { RandomUser } from "../types/types";
+
 export abstract class ApiProviderAbstract {
-    constructor(){}
+  constructor() {}
 
   /**
-   * Return one random person identity 
+   * Return one random person identity
    *
    * @abstract
    * @memberof ApiProviderAbstract
    */
-  abstract randomPeople(): Object
+  abstract randomPeople(): Promise<RandomUser>;
 
   /**
    * Return one random person identity by country nationality
@@ -16,7 +18,7 @@ export abstract class ApiProviderAbstract {
    * @param {string[]} pArg
    * @memberof ApiProviderAbstract
    */
-  abstract randomPeopleByNationality(pArg: string[]): Object
+  abstract randomUserByNationality(pArg: string[]): Promise<RandomUser>;
 
   /**
    * Filter by main attributes object
@@ -27,21 +29,14 @@ export abstract class ApiProviderAbstract {
    * @param {string[]} pArg
    * @memberof ApiProvider
    */
-   abstract randomAttributeFilter(pArg: string[]): Object 
+  abstract randomAttributeFilter(pArg: string[]): Promise<RandomUser>;
 
-   /**
-    * Return many random identity max returned 5000
-    *
-    * @abstract
-    * @param {number} pArg
-    * @memberof ApiProviderAbstract
-    */
-   abstract manyRandomIdentity(pArg: number): Object[] | Object
-
-  //  abstract randomPeopleSync(): Object
-  //  abstract randomPeopleByNationalitySync(pArg: string[]): Object
-  //  abstract randomAttributeFilterSync(pArg: string[]): Object 
-  //  abstract manyRandomIdentitySync(pArg: number): Object[] | Object
-   
-
+  /**
+   * Return many random identity max returned 5000
+   *
+   * @abstract
+   * @param {number} pArg
+   * @memberof ApiProviderAbstract
+   */
+  abstract manyRandomUser(pArg: number): Promise<RandomUser[]>;
 }

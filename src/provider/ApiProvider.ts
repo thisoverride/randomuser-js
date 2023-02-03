@@ -1,29 +1,26 @@
 import { instance } from "../config/axios.conf";
 import { ApiProviderAbstract } from "./ApiProviderAbstract";
-import {RandomUser} from '../types/types';
-import randomuserme from "../main";
+import { RandomUser } from "../types/types";
 
-export class ApiProvider extends ApiProviderAbstract{
- 
-  constructor(){
+export class ApiProvider extends ApiProviderAbstract {
+  constructor() {
     super();
   }
 
   /**
    *
    *
-   * @return {*}  {Promise<Object>}
+   * @return {*}  {Promise<RandomUser>}
    * @memberof ApiProvider
    */
-  public async randomPeople(): Promise<RandomUser | null> { // modifier le type de revoie 
+  public async randomPeople(): Promise<RandomUser> {
     try {
-      let response = await instance.get("/api");
-      const data :RandomUser = response.data;
-      
-      return data;
+      let { data } = await instance.get("/api");
+
+      return data.results[0];
     } catch (error) {
       console.error(error);
-      return null;
+      return {} as RandomUser;
     }
   }
 
@@ -31,42 +28,39 @@ export class ApiProvider extends ApiProviderAbstract{
    *
    *
    * @param {string[]} pNat
-   * @return {*}  {Promise<Object>}
+   * @return {*}  {Promise<RandomUser>}
    * @memberof ApiProvider
    */
-  public async randomPeopleByNationality(pNat: string[]): Promise<Object> {
-    if (!pNat.length) {return {};}
+  public async randomUserByNationality(pNat: string[]): Promise<RandomUser> {
+    if (!pNat.length) {
+      return {} as RandomUser;
+    }
 
     let params: string = "";
     for (let i = 0; i < pNat.length; i++) {
       params += pNat[i];
-      if (i !== pNat.length - 1) {
-        params += ",";
-      }
+      i !== pNat.length - 1 ? (params += ",") : "";
     }
 
     try {
       const { data } = await instance.get(`/api?nat=${params}`);
-      let filterData: Object = new Object();
-      data.results.forEach((itemFilter: Object) => (filterData = itemFilter));
-
-      return filterData;
-
+      return data.results[0];
     } catch (error) {
       console.error(error);
-      return {};
+      return {} as RandomUser;
     }
-   
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param {string[]} pArg
-   * @return {*}  {Promise < Object>}
+   * @return {*}  {Promise <RandomUser>}
    */
-  public async randomAttributeFilter(pArg: string[]): Promise<Object> {
-    if (!pArg.length) {return {};}
+  public async randomAttributeFilter(pArg: string[]): Promise<RandomUser> {
+    if (!pArg.length) {
+      return {} as RandomUser;
+    }
 
     let params: string = "";
     for (let i = 0; i < pArg.length; i++) {
@@ -78,13 +72,10 @@ export class ApiProvider extends ApiProviderAbstract{
 
     try {
       const { data } = await instance.get(`/api?inc=${params}`);
-      let filterData: Object = new Object();
-      data.results.forEach((itemFilter: Object) => (filterData = itemFilter));
-
-      return filterData;
+      return data.results[0];
     } catch (error) {
       console.error(error);
-      return {};
+      return {} as RandomUser;
     }
   }
 
@@ -95,17 +86,16 @@ export class ApiProvider extends ApiProviderAbstract{
    * @return {*}  {(Promise< Object[] | Object>)}
    * @memberof ApiProvider
    */
-  public async manyRandomIdentity(pArg: number): Promise< Object[] | Object> {
-    if(pArg < 1 || pArg > 5000){return {}}
+  public async manyRandomUser(pArg: number): Promise<RandomUser[]> {
+    if (pArg < 1 || pArg > 5000) {
+      return {} as RandomUser[];
+    }
     try {
       const { data } = await instance.get(`/api?results=${pArg}`);
-      
       return data.results;
     } catch (error) {
       console.error(error);
-      return {};
+      return {} as RandomUser[];
     }
-
   }
- 
 }

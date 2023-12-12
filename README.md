@@ -24,9 +24,7 @@ const user = await randomuserme.randomUser();
 
 console.log(user);
 
-```
-
-````json
+//output
 {
   gender: 'female',
   name: { title: 'Miss', first: 'Faith', last: 'Osullivan' },
@@ -61,7 +59,7 @@ console.log(user);
   },
   nat: 'IE'
 }
-```
+
 getRandomUser returns a promise that resolves to a random user object, with the following properties:
 
 gender: the user's gender (male or female)

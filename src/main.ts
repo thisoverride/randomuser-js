@@ -1,3 +1,3 @@
-import { RandomUserMe } from "./provider/RandomUserMe";
-const randomuserme = new RandomUserMe();
+import  { RandomUserMe } from './provider/RandomUserMe';
+const randomuserme = RandomUserMe;
 export default randomuserme;

@@ -1,101 +1,108 @@
-import { instance } from "../config/axios.conf";
-import { RandomUserMeAbstract } from "./RandomUserMeAbstract";
-import { RandomUser } from "../types/types";
+import axios, { AxiosError, AxiosInstance } from 'axios';
+import { RandomUser, RandomUserError } from '../@types/types';
 
-export class RandomUserMe extends RandomUserMeAbstract {
-  constructor() {
-    super();
-  }
+const instance: AxiosInstance = axios.create({
+  baseURL: 'https://randomuser.me/api/',
+  timeout: 1000,
+});
+
+export class RandomUserMe{
 
   /**
-   *
-   *
-   * @return {*}  {Promise<RandomUser>}
-   * @memberof ApiProvider
-   */
-  public async randomUser(): Promise<RandomUser> {
+  * Return one random person identity
+  * 
+  * @returns {Promise<RandomUser | RandomUserError>} - A promise resolving to a RandomUser or error.
+  */
+  public static async randomUser(): Promise<RandomUser | RandomUserError> {
     try {
-      let { data } = await instance.get("/api");
-
+      const { data } = await instance.get('/');
       return data.results[0];
     } catch (error) {
-      console.error(error);
-      return {} as RandomUser;
+      return this.handleError(error);
     }
   }
 
   /**
-   *
-   *
-   * @param {string[]} pNat
-   * @return {*}  {Promise<RandomUser>}
-   * @memberof ApiProvider
-   */
-  public async randomUserByNationality(pNat: string[]): Promise<RandomUser> {
-    if (!pNat.length) {
+     * Return one random person identity by country nationality
+     * AU,BR,CA,CH,DE,DK,ES,FI,FR,GB,IE,IN,IR,MX,NL,NO,NZ,RS,TR,UA,US
+     * 
+     * @param {string[]} strNationality - Array of country codes ('AU', 'BR').
+     * @memberof RandomUserMe
+     */
+  public static async randomUserByNationality(strNationality: string[]): Promise<RandomUser | RandomUserError> {
+    if (!strNationality.length) {
       return {} as RandomUser;
     }
 
-    let params: string = "";
-    for (let i = 0; i < pNat.length; i++) {
-      params += pNat[i];
-      i !== pNat.length - 1 ? (params += ",") : "";
-    }
-
+    const params: string = strNationality.join(',');
     try {
-      const { data } = await instance.get(`/api?nat=${params}`);
+      const { data } = await instance.get(`/?nat=${params}`);
       return data.results[0];
     } catch (error) {
-      console.error(error);
-      return {} as RandomUser;
+      return this.handleError(error);
     }
   }
 
-  /**
-   *
-   *
-   * @param {string[]} pArg
-   * @return {*}  {Promise <RandomUser>}
-   */
-  public async randomAttributeFilter(pArg: string[]): Promise<RandomUser> {
-    if (!pArg.length) {
+
+   /**
+    * Filter by main attributes object.
+    * Allowed attributes: gender, name, location, email, login, dob, registered, phone, cell, id, picture, nat (nationality).
+    * 
+    * @param {string[]} attributes - Array of attributes to include in the response.
+    * @returns {Promise<RandomUser | RandomUserError>} - A promise resolving to a RandomUser or error.
+    */
+  public static async randomAttributeFilter(Arg: string[]): Promise<RandomUser | RandomUserError> {
+    if (!Arg.length) {
       return {} as RandomUser;
     }
 
-    let params: string = "";
-    for (let i = 0; i < pArg.length; i++) {
-      params += pArg[i];
-      if (i !== pArg.length - 1) {
-        params += ",";
-      }
-    }
-
+    const params = Arg.join(',');
     try {
-      const { data } = await instance.get(`/api?inc=${params}`);
+      const { data } = await instance.get(`/?inc=${params}`);
       return data.results[0];
     } catch (error) {
-      console.error(error);
-      return {} as RandomUser;
+      return this.handleError(error);
     }
   }
 
   /**
-   *
-   *
-   * @param {number} pArg
-   * @return {*}  {(Promise< Object[] | Object>)}
-   * @memberof ApiProvider
-   */
-  public async manyRandomUser(pArg: number): Promise<RandomUser[]> {
-    if (pArg < 1 || pArg > 5000) {
-      return {} as RandomUser[];
+  * Return many random identities, maximum returned 5000.
+  * 
+  * @param {number} numberOfRandom - Number of random identities to retrieve (max 5000).
+  * @returns {Promise<RandomUser[] | RandomUserError>} - A promise resolving to an array of RandomUsers or an error.
+  */
+  public static async manyRandomUser(numberOfRandom: number): Promise<RandomUser[] | RandomUserError> {
+    if (numberOfRandom < 1 || numberOfRandom > 5000) {
+      return [] as RandomUser[];
     }
+
     try {
-      const { data } = await instance.get(`/api?results=${pArg}`);
+      const { data } = await instance.get(`/?results=${numberOfRandom}`);
       return data.results;
     } catch (error) {
-      console.error(error);
-      return {} as RandomUser[];
+      return this.handleError(error);
     }
   }
+
+   /**
+   * Handles errors returned from API calls.
+   * 
+   * @param {unknown} error - The error object.
+   * @returns {RandomUserError | unknown} - Error object containing error details.
+   */
+  private static handleError (error : unknown): RandomUserError {
+    if (error instanceof AxiosError) {
+      if (error.response && error.response.status) {
+        return {
+          status: error.response.status,
+          code: error.code,
+          message: error.message,
+          data: error.response.data
+        };
+      }
+    }
+    return error as any
+  }
 }
+    
+  

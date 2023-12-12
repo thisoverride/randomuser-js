@@ -61,3 +61,10 @@ export interface Timezone {
   offset: string;
   description: string;
 }
+
+export interface RandomUserError {
+  status: number;
+  code: string | undefined,
+  message: string,
+  data: string
+}

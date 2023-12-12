@@ -1,4 +1,4 @@
-# RandomUser-JS
+# RandomUser JS
 
 RandomUser-JS is a JavaScript module designed to facilitate the generation of random user data from the RandomUser.me API.
 
@@ -28,7 +28,7 @@ const user = await randomuserme.randomUser();
 console.log(user);
 ```
 
-### Ouput
+### Output
 
 ```json
 {
